@@ -1,6 +1,6 @@
 # ERAS
 
-Hi THis is mY first official commit to GitHub
+Hi THis is My first official commit to GitHub
 
 this is a django web app project that can help with Event creation and organization by using QR-Codes in Event Registration and recording Attendance
 
