@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
+from .configs import *
 from pathlib import Path
 from django.contrib.messages import constants as messages
 
@@ -175,7 +176,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 # Gmail account credentials
-# email sender account an app password 
-# password can be generated in google account settings
-EMAIL_HOST_USER = 'sender@gmail.com'
+# email sender account and app password 
+
+EMAIL_HOST_USER = EMAIL_SENDER
 EMAIL_HOST_PASSWORD = 'app_password'

@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth import get_user_model as User
 from django.contrib.auth.forms import UserCreationForm
-from Main.variables import HostName
+from ERAS.configs import *
 from .forms import NewUserForm
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -19,10 +19,9 @@ def register(request):
             subject = 'Account Activation Request'
             message = render_to_string('email_template.html', {
                 'heading': Email_Heading(user),
-                'message': f'{HostName}/activate/{user.secret_id}',
+                'message': f'{HOSTNAME}/activate/{user.secret_id}',
             })
-            # put your email that will send the activation mail
-            from_email = 'sender@gmail.com'
+            from_email = EMAIL_SENDER
             recipient_list = [Email_Recipient(user),]
 
             send_mail(subject, None, from_email, recipient_list, html_message=message)
@@ -65,5 +64,4 @@ def Email_Recipient(user):
     if user.role == User().Attendee:
         return user.email
     else:
-        # put your admin email that will recieve the account activation request
-        return "admin@gmail.com"
+        return EMAIL_RECIEVER_ADMIN
