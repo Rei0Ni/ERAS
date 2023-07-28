@@ -21,7 +21,8 @@ def register(request):
                 'heading': Email_Heading(user),
                 'message': f'{HostName}/activate/{user.secret_id}',
             })
-            from_email = 'abdelrahman.hamdy.hashim@gmail.com'
+            # put your email that will send the activation mail
+            from_email = 'sender@gmail.com'
             recipient_list = [Email_Recipient(user),]
 
             send_mail(subject, None, from_email, recipient_list, html_message=message)
