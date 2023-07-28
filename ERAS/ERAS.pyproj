@@ -95,22 +95,15 @@
     <Content Include="Main\templates\Main\TicketView.html" />
     <Content Include="Main\templates\Main\UpdateEvent.html" />
     <Content Include="requirements.txt" />
-    <Content Include="db.sqlite3" />
     <Content Include="static\css\bootstrap.min.css" />
     <Content Include="static\css\bootstrap.min.css.map" />
     <Content Include="static\css\EventView.css" />
     <Content Include="static\css\home.css" />
     <Content Include="static\img\favicon.ico" />
-    <Content Include="static\img\hbg1.jpg" />
     <Content Include="static\js\bootstrap.bundle.min.js" />
     <Content Include="static\js\EventView.js" />
     <Content Include="static\js\jquery.min.js" />
     <Content Include="Users\templates\Users\index.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="readme.html">
-      <SubType>WebBrowser</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">
