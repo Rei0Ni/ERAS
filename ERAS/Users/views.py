@@ -65,4 +65,5 @@ def Email_Recipient(user):
     if user.role == User().Attendee:
         return user.email
     else:
-        return "the.inspector.2000@gmail.com"
+        # put your admin email that will recieve the account activation request
+        return "admin@gmail.com"
