@@ -1,0 +1,72 @@
+{% extends 'Main/base.html' %}
+
+{% block files %}
+<link rel="stylesheet" href="../../../static/css/home.css">
+<style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    .banner {
+      height: 600px;
+      background-image: url("https://images.unsplash.com/photo-1682547094924-4b198c6c6d1f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80");
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+    }
+
+    {% if request.user_agent.is_mobile %}
+    .banner h1 {
+        font-size: 20px;
+        color: white;
+        margin-left: 8%;
+      }
+    {% else %}
+    .banner h1 {
+        font-size: 64px;
+        color: white;
+        margin-left: 100px;
+      }
+    {% endif %}
+
+    .footer {
+      background-color: grey;
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
+{% endblock files %}
+
+{% block title %}Home | ERAS{% endblock title %}
+
+{% block content %}
+<div class="container">
+<div class="banner">
+    <h1>Event Registration And Attendance System Using Qr Codes</h1>
+</div>
+</div>
+
+<div style="height: 300px;">
+
+</div>
+<footer class="bg-info text-center text-lg-start">
+    <div class="text-center p-3 bg-dark" data-bs-theme="dark">
+        <a class="text-light link-offset-2 link-underline link-underline-opacity-0" href="/">ERAS</a>
+      </div>
+</footer>
+{% endblock content %}

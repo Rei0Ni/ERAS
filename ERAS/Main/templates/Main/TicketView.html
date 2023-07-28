@@ -1,0 +1,58 @@
+{% extends 'Main/base.html' %}
+
+{% block title %}Event | ERAS{% endblock title %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="mt-4 p-4 bg-dark text-light rounded">
+        {% if Ticket.qr_code %}
+          <h1 class="d-flex justify-content-center">Ticket ID: {{Ticket.ticket_id}}</h1>
+          <hr>
+          <div class="row">
+            {% if request.user_agent.is_mobile %}
+            <div>
+            {% else %}
+            <div class="col-8">
+            {% endif %}
+              <p class="fs-1 ps-3">User: {{ Ticket.user }}</p>
+              <p class="fs-3 ps-3">Expirey: {{Ticket.expiry_date}}</p>
+              <p class="fs-3 ps-3">Event Date: <br/>"{{ Event.eventstartdate }}" To "{{Event.eventenddate}}"</p>
+              <p class="fs-3 ps-3">Event Time: <br/>"{{ Event.starttime }}" To "{{Event.endtime}}"</p>
+              <p class="fs-3 ps-3">Event Location: <br/>"{{ Event.location }}"</p>
+              <p class="fs-3 ps-3">Event Description: <br/>"{{ Event.description }}"</p>
+            </div>
+            {% if request.user_agent.is_mobile %}
+            <hr/>
+            <div>
+              <p class="mb-2 fs-3 d-flex justify-content-center">Ticket QR-Code</p>
+              <div class="d-flex justify-content-center" style="height: 130px;">
+                <img src={{ Ticket.qr_code.url }} width="130" class="img-fluid">
+              </div>
+            </div>
+            {% else %}
+            <div class="col-1 pe-0 me-0 d-flex justify-content-center">
+              <div class="vr"></div>
+            </div>
+            <div class="col-3 pe-4 ps-0 ms-0">
+              <p class="mb-2 fs-3 d-flex justify-content-center">Ticket QR-Code</p>
+              <div class="d-flex justify-content-center" style="height: 130px;">
+                <img src={{ Ticket.qr_code.url }} width="130" class="img-fluid">
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        {% else %}
+          <h1 class="display-4">{{ Event.title }}</h1>
+          <p class="lead">{{ Event.description }}</p>
+        {% endif %}
+        {% if Ticket %}
+        
+        
+        {% else %}
+        <h3>There is no Tickets in this event yet.</h3>
+        <br>
+        <a class="btn btn-success" href="/event/{{ Event.event_id }}/ticket/create/" role="button">Create New Ticket</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

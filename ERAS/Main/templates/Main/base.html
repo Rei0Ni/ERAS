@@ -1,0 +1,88 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.13.4/datatables.min.css" rel="stylesheet"/>
+        <script src="https://cdn.datatables.net/v/bs5/jq-3.6.0/dt-1.13.4/datatables.min.js"></script>
+        <script src="{% static 'js/bootstrap.bundle.min.js' %}" ></script>
+        <link rel="shortcut icon" type="image/png" href="/static/img/favicon.ico"/>
+        <style>
+          body{
+            background-color: black;
+          }
+        </style>
+        {% block files %}{% endblock files %}
+        <title>{% block title %}{% endblock %}</title>
+    </head>
+    <body>
+      {% if user.is_authenticated %}
+      <nav class="navbar navbar-expand fixed-top bg-dark bg-body-tertiary" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand fw-semibold" href="/">ERAS</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Welcome: {{ user.username }} &#128075;
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="/dashboard/">Dashboard</a></li>
+                  <li><a class="dropdown-item" href="/accounts/logout/">Logout</a></li>
+                  {% if user.is_staff and user.is_superuser %}
+                  <li><a class="dropdown-item" href="/admin/">Admin</a></li>
+                  {% endif %}
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% else %}
+        <nav class="navbar navbar-expand-sm bg-dark bg-body-tertiary" data-bs-theme="dark">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="/">ERAS</a>
+            {% if request.path == "/" %}
+            <div class="justify-content-end">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="btn btn-success" href="/accounts/login/">Login</a>
+                  <a class="btn btn-secondary" href="/accounts/register/">Register</a>
+                </li>
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+        </nav>
+      {% endif %}
+          <div style="height: 60px;"></div>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="container p-0">
+            <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert" >
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ message }}
+            </div>
+            </div>
+
+            <div class="toast align-items-center mt-5" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="d-flex {{ message.tags }}">
+                <div class="toast-body">
+                  Hello, world! This is a toast message.
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+        {% block scripts %}{% endblock scripts %}
+    </body>
+</html>

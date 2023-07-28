@@ -1,0 +1,49 @@
+{% extends 'Main/base.html' %}
+
+
+{% load crispy_forms_tags %}
+
+{% block title %}Event Update | ERAS{% endblock title %}
+
+{% block content %}
+{% if request.user_agent.is_mobile %}
+<div class="container">
+{% else %}
+<div class="container col-7">
+{% endif %}
+    <div class="mt-4 mb-4 p-4 bg-dark text-light rounded">
+        <h1 class="text-center">Update Event</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="title" class="form-label">Title</label>
+            <input class="form-control" type="text" id="title" name="title" value="{{ Event.title }}"> 
+            <br>
+            <label for="location" class="form-label">location</label>
+            <input class="form-control" type="text" id="location" name="location" value="{{ Event.location }}"> 
+            <br>
+            <label for="description" class="form-label">Description</label>
+            <input class="form-control" type="text" id="description" name="description" value="{{ Event.description }}"></input>
+            <br>
+            <label for="eventstartdate" class="form-label">Event Start Date</label>
+            <input class="form-control" type="date" id="eventstartdate" name="eventstartdate" value="{{ Event.eventstartdate|date:"Y-m-d" }}">
+            <br>
+            <label for="eventenddate" class="form-label">Event End Date</label>
+            <input class="form-control" type="date" id="eventenddate" name="eventenddate" value="{{ Event.eventenddate|date:"Y-m-d" }}">
+            <br>
+            <label for="starttime" class="form-label">start Time</label>
+            <input class="form-control" type="time" id="starttime" name="starttime" value="{{ Event.starttime|date:"H:i" }}">
+            <br>
+            <label for="endtime" class="form-label">End Time</label>
+            <input class="form-control" type="time" id="endtime" name="endtime" value="{{ Event.endtime|date:"H:i" }}">
+            <br>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary" type="submit">Update</button>
+            </div>                
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+             

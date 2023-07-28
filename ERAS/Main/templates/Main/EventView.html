@@ -1,0 +1,249 @@
+{% extends 'Main/base.html' %}
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block files %}
+<script src="https://kit.fontawesome.com/cb01e5b090.js" crossorigin="anonymous"></script>
+<script src="{% static 'js/EventView.js' %}" defer></script>
+<link rel="stylesheet" href="{% static 'css/EventView.css' %}">
+{% endblock files %}
+
+{% block title %}Event | ERAS{% endblock title %}
+
+{% block content %}
+<div id="cover-spin"></div>
+<div class="container">
+    <div class="mb-4 mt-4 p-4 bg-dark text-light rounded">
+        {% if Event.qr_code %}
+          <h1 class="d-flex justify-content-center">Event ID: {{Event.event_id}}</h1>
+          <hr>
+          <div class="row">
+            {% if request.user_agent.is_mobile %}
+            <div>
+            {% else %}
+            <div class="col-8">
+            {% endif %}
+              <h1 class="display-3 ps-3">{{ Event.title }}</h1>
+              {% if request.user_agent.is_mobile %}
+              <p class="fs-3 ps-3">Date: <br/>From "{{ Event.eventstartdate }}"<br>To "{{ Event.eventenddate }}"</p>
+              {% else %}
+              <p class="fs-3 ps-3">Date: <br/>From "{{ Event.eventstartdate }}" To "{{ Event.eventenddate }}"</p>
+              {% endif %}
+              <p class="fs-3 ps-3">Time: <br/>"{{ Event.starttime }}" To "{{ Event.endtime }}"</p>
+              <p class="fs-3 ps-3">Location: <br/>"{{ Event.location }}"</p>
+              <p class="fs-3 ps-3">Description: <br/>"{{ Event.description }}"</p>
+            </div>
+            {% if request.user_agent.is_mobile %}
+            <hr/>
+            <div>
+              <p class="mb-2 fs-3 d-flex justify-content-center">Event QR-Code</p>
+              <div class="d-flex justify-content-center" style="height: 130px;">
+                <img src={{ Event.qr_code.url }} width="130" class="img-fluid">
+              </div>
+              <a class="btn btn-primary d-block text-center mt-2" href={{ Event.qr_code.url }} download>Download QR-Code</a>
+              <a type="button" class="btn btn-success d-block text-center mt-3" data-bs-toggle="modal" data-bs-target="#EventStaffModal">
+                Event Staff
+              </a>
+            </div>
+            {% else %}
+            <div class="col-1 pe-0 me-0 d-flex justify-content-center">
+              <div class="vr"></div>
+            </div>
+            <div class="col-3 pe-4 ps-0 ms-0">
+              <p class="mb-2 fs-3 d-flex justify-content-center">Event QR-Code</p>
+              <div class="d-flex justify-content-center" style="height: 130px;">
+                <img src={{ Event.qr_code.url }} width="130" class="img-fluid">
+              </div>
+              <a class="btn btn-primary d-block text-center mt-2" href={{ Event.qr_code.url }} download>Download QR-Code</a>
+              <a type="button" class="btn btn-success d-block text-center mt-3" data-bs-toggle="modal" data-bs-target="#EventStaffModal">
+                Event Staff
+              </a>
+            </div>
+            {% endif %}
+            
+          </div>
+        {% else %}
+          <h1 class="display-4">{{ Event.title }}</h1>
+          <p class="lead">{{ Event.description }}</p>
+        {% endif %}
+        <hr class="my-4">
+        {% if Ticket %}
+        <h3>Tickets: {{ Ticket.count}} <button type="button" class="btn btn-success ms-3 mb-2" data-bs-toggle="modal" data-bs-target="#TicketModal">
+          Create New Ticket
+        </button></h3>
+        <h3>Attendance: {{ attended }}</h3>
+        <div class="table-responsive">
+          <table id="tickettable" class="table">
+            <thead class="thead-light text-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Registrant</th>
+                    <th scope="col">Ticket ID</th>
+                    <th scope="col">Attendance</th>
+                  </tr>
+            </thead>
+            <tbody class="text-light">
+                {% for Ticket in Ticket %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a class="link-underline link-underline-opacity-0" href="/event/{{Event.event_id}}/ticket/{{Ticket.ticket_id}}">{{ Ticket.user.username }}</a></td>
+                    <td>{{ Ticket.ticket_id }}</td>
+                    {% if Ticket.attended %}
+                    <td class="d-flex justify-content-center"><input class="mb-1 form-check-input" type="checkbox" checked="checked" disabled="disabled"/></td>
+                    {% else %}
+                    <td class="d-flex justify-content-center"><input class="mb-1 form-check-input" type="checkbox" disabled="disabled"/></td>
+                    {% endif %}
+                  </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-center">
+          <h3>There is no Tickets in this event yet.</h3>
+        </div>
+        <br>
+        <div class="d-flex justify-content-center">
+          <button type="button" class="btn btn-success ms-3 mb-2" data-bs-toggle="modal" data-bs-target="#TicketModal">
+            Create New Ticket
+          </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="modal fade" id="TicketModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Create New Ticket</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="Ticket_Form" action="/event/{{ Event.event_id }}/ticket/create/" method="POST">
+            {% csrf_token %}
+            {{ Ticket_Form|crispy }}  
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary" form="Ticket_Form" type="submit">Ceate</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="EventStaffModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Event Staff</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h6>Event Staff List:</h6>
+        {% if Staff_List|length > 0 %}
+        <ul id="Staff_List" class="list-group list-group-numbered pt-3 pb-3">
+          {% for Staff in Staff_List %}
+          <li class="list-group-item align-items-center d-flex justify-content-between">
+            <span id="Staff_ID">{{ Staff }}</span>
+            <button id="DeleteStaff" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="d-flex justify-content-center">
+          <p class="text-center">This Event Doesn't Have Staff Yet!<br>Please Add one.</p>
+        </div>
+        {% endif %}
+        
+        <form id="StaffDeleteForm" method="POST" action=""></form>
+        <hr>
+        <form id="Staff_Form" action="/event/{{ Event.event_id }}/staff/add/" method="POST">
+          <h6 class="pb-3">Add Event Staff:</h6>
+          {% csrf_token %}
+          {{ Staff_Form|crispy }} 
+          <div class="d-flex justify-content-center">
+            <button class="btn btn-primary" form="Staff_Form" type="submit">Add Staff</button>
+          </div> 
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  jQuery(document).ready(function() {
+    jQuery("#tickettable").DataTable(
+      {
+        "columnDefs":[
+          {"targets":[2,3], "orderable": false}
+        ]
+      }
+    );
+  });
+
+  var deleteButtons = document.querySelectorAll('#DeleteStaff');
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  deleteButtons.forEach(function(button){
+    button.addEventListener('click', function() {
+      var listItem = this.parentNode;
+      var list = listItem.parentNode;
+      var EventStaff = listItem.querySelector('#Staff_ID').innerText;
+      var formdata = new FormData();
+      formdata.append("Staff_ID", EventStaff);
+      var xhr = new XMLHttpRequest();
+      document.getElementById('cover-spin').style.display = "block"
+      xhr.open('POST', 'https://192.168.1.8/event/{{ Event.event_id}}/staff/remove/');
+      xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+      xhr.send(formdata);
+      xhr.onreadystatechange = function(){
+        if (xhr.readyState === 4){
+          if (xhr.status === 200){
+            if (JSON.parse(xhr.responseText)['status'] == "Error"){
+              alert("Staff doesn't Exist in this Event")
+            }else{
+              document.getElementById('id_secret_id').value = "";
+              formdata = new FormData();
+              list.removeChild(listItem);
+              alert("Event Staff Removed Successfully");
+              window.location = xhr.responseURL
+              if (isEmpty("Staff_List")){
+                document.getElementById("Staff_List").innerHTML = '<div class=\"d-flex justify-content-center\"><p class=\"text-center\">This Event Doesn\'t Have Staff Yet!<br>Please Add one.</p></div>'
+              }
+            }
+            document.getElementById('cover-spin').style.display = "none"
+          }
+        }
+      };
+    })
+  })
+
+  function isEmpty(id) {
+    return document.getElementById(id).innerHTML.trim() == ""
+  }
+</script>
+{% endblock scripts %}

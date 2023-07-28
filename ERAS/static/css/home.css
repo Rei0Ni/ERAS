@@ -1,0 +1,5 @@
+.banner {
+    background: url('../img/hbg1.jpg');
+    background-size: cover;
+    background-blend-mode: multiply;
+  }

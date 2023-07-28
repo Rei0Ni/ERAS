@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ERAS", "ERAS\ERAS.pyproj", "{3E71BD43-CD67-429F-9DE7-493FB1C62FA6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E71BD43-CD67-429F-9DE7-493FB1C62FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E71BD43-CD67-429F-9DE7-493FB1C62FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E71BD43-CD67-429F-9DE7-493FB1C62FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E71BD43-CD67-429F-9DE7-493FB1C62FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88F6F27B-20AC-4AC0-8F43-3179B6B1E3D7}
+	EndGlobalSection
+EndGlobal
